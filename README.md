@@ -48,7 +48,7 @@ pattern main resolution 8
     28 sax D5  8 50
 end
 ```
-[lick.webm](https://github.com/user-attachments/assets/9f20ba07-b381-434a-b3e8-ef0eaf45ec62)
+[lick.webm](https://github.com/user-attachments/assets/7c95400a-e7a6-4870-9f5a-72cf58f91462)
 
 Вы можете найти больше примеров композиций в формате **ITMO Loops** в директории [examples/](./examples/). Используйте их для проверки работоспособности вашей программы.
 
