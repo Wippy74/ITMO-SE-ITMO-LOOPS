@@ -5,7 +5,7 @@ add_executable(
     Audio/AudioBuffer.cpp
     Audio/WavReader.cpp
     Audio/WavWritter.cpp
-    DSl/Parser.cpp
+    DSL/Parser.cpp
     DSL/Tokenizer.cpp
     Effects/EchoEffect.cpp
     Effects/GainEffect.cpp
