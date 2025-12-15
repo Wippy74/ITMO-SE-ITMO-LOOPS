@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 
 namespace engine {
@@ -52,7 +53,7 @@ audio::AudioBuffer Renderer::render(const model::NoteEvents& events) {
     lastEnd = std::max(lastEnd, e.startSec + e.durSec);
   }
   const size_t baseSamples = SecToSamples(lastEnd + m_opt.tailSec, m_opt.SampleRate);
-  master.resize(baseSamples, 0.0f);
+  master.data.reserve(baseSamples);
   for (const auto& [instName, evPtrs] : byInst) {
     auto itSpec = m_comp.instruments.find(instName);
     if (itSpec == m_comp.instruments.end()) {
@@ -61,9 +62,15 @@ audio::AudioBuffer Renderer::render(const model::NoteEvents& events) {
     const model::InstrumentSpec& spec = itSpec->second;
     std::unique_ptr<instruments::IInstrument> inst = factory::InstrumentFactory::create(spec);
     audio::AudioBuffer track;
-    track.resize(baseSamples, 0.0f);
+    track.data.reserve(baseSamples);
     for (const model::NoteEvent* pe : evPtrs) {
       const model::NoteEvent& e = *pe;
+      if (e.durSec <= 0.0) {
+        continue;
+      }
+      if (e.startSec < 0.0) {
+        continue;
+      }
       const size_t offset = SecToSamples(e.startSec, m_opt.SampleRate);
       audio::AudioBuffer note = inst->RenderNote(e.midi, e.durSec, e.velocity01, m_opt.SampleRate);
       track.MixAddFrom(note, offset);
