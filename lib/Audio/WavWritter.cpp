@@ -6,18 +6,15 @@
 
 namespace audio {
 
-static void writeFourCC(std::ostream& out, const char cc[4]) {
-  out.write(cc, 4);
-}
 
-static void writeLE16(std::ostream& out, uint16_t v) {
+static void Write16(std::ostream& out, uint16_t v) {
   uint8_t b0 = static_cast<uint8_t>(v & 0xFF);
   uint8_t b1 = static_cast<uint8_t>((v >> 8) & 0xFF);
   out.write(reinterpret_cast<const char*>(&b0), 1);
   out.write(reinterpret_cast<const char*>(&b1), 1);
 }
 
-static void writeLE32(std::ostream& out, uint32_t v) {
+static void Write32(std::ostream& out, uint32_t v) {
   uint8_t b0 = static_cast<uint8_t>(v & 0xFF);
   uint8_t b1 = static_cast<uint8_t>((v >> 8) & 0xFF);
   uint8_t b2 = static_cast<uint8_t>((v >> 16) & 0xFF);
@@ -28,7 +25,7 @@ static void writeLE32(std::ostream& out, uint32_t v) {
   out.write(reinterpret_cast<const char*>(&b3), 1);
 }
 
-static int16_t floatToInt16(float x) {
+static int16_t FloatToInt16(float x) {
   if (x > 1.0f) {
     x = 1.0f;
   }
@@ -58,22 +55,22 @@ void WavWriter::WriteWav(const std::string& path, const AudioBuffer& buffer) {
   const uint32_t fmtChunkSize = 16;
   const uint32_t dataBytes = static_cast<uint32_t>(buffer.data.size() * sizeof(int16_t));
   const uint32_t riffSize = 4 + (8 + fmtChunkSize) + (8 + dataBytes);
-  writeFourCC(out, "RIFF");
-  writeLE32(out, riffSize);
-  writeFourCC(out, "WAVE");
-  writeFourCC(out, "fmt ");
-  writeLE32(out, fmtChunkSize);
-  writeLE16(out, audioFormat);
-  writeLE16(out, numChannels);
-  writeLE32(out, SampleRate);
-  writeLE32(out, byteRate);
-  writeLE16(out, blockAlign);
-  writeLE16(out, bitsPerSample);
-  writeFourCC(out, "data");
-  writeLE32(out, dataBytes);
+  out.write("RIFF", 4);
+  Write32(out, riffSize);
+  out.write("WAVE", 4);
+  out.write("fmt ", 4);
+  Write32(out, fmtChunkSize);
+  Write16(out, audioFormat);
+  Write16(out, numChannels);
+  Write32(out, SampleRate);
+  Write32(out, byteRate);
+  Write16(out, blockAlign);
+  Write16(out, bitsPerSample);
+  out.write("data", 4);
+  Write32(out, dataBytes);
   for (float x : buffer.data) {
-    const int16_t s = floatToInt16(x);
-    writeLE16(out, static_cast<uint16_t>(static_cast<int16_t>(s)));
+    const int16_t s = FloatToInt16(x);
+    Write16(out, static_cast<uint16_t>(static_cast<int16_t>(s)));
   }
   if (!out) {
     throw std::runtime_error("WavWriter: write failed");

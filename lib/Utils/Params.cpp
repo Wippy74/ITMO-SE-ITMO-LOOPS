@@ -2,6 +2,10 @@
 
 #include <cctype>
 #include <stdexcept>
+#include <string>
+#include <optional>
+#include <utility>
+#include <cstdint>
 
 #include "Errors.h"
 
@@ -9,7 +13,7 @@ namespace utils {
 
 ParamReader::ParamReader(const Params& p) : m_p(p) {}
 
-bool ParamReader::has(const std::string& key) const {
+bool ParamReader::Has(const std::string& key) const {
   return m_p.find(key) != m_p.end();
 }
 

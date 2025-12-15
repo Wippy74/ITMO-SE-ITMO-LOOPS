@@ -275,5 +275,6 @@ struct SamplerInstrumentRegistrar {
     );
   }
 };
+
 static SamplerInstrumentRegistrar g_sampler_registrar;
 } // namespace

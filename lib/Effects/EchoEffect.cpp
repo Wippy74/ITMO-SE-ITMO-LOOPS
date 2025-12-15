@@ -71,5 +71,6 @@ struct EchoEffectRegistrar {
     );
   }
 };
+
 static EchoEffectRegistrar g_echo_registrar;
 } // namespace

@@ -11,13 +11,24 @@ namespace instruments {
 
 static double GetFloat(const model::Params& p, const std::string& key, double def) {
   auto it = p.find(key);
-  if (it == p.end()) {
-    return def;
-  }
+  if (it == p.end()) return def;
   try {
     return std::stod(it->second);
   } catch (...) {
-    throw std::runtime_error("SineInstrument: invalid float param '" + key + "'");
+    throw std::runtime_error("SquareInstrument: invalid float param '" + key + "'");
+  }
+}
+
+static int GetInt(const model::Params& p, const std::string& key, int def) {
+  auto it = p.find(key);
+  if (it == p.end()) return def;
+  try {
+    size_t idx = 0;
+    int v = std::stoi(it->second, &idx, 10);
+    if (idx != it->second.size()) throw std::runtime_error("");
+    return v;
+  } catch (...) {
+    throw std::runtime_error("SquareInstrument: invalid int param '" + key + "'");
   }
 }
 
@@ -49,13 +60,21 @@ static void ApplyAttackRelease(audio::AudioBuffer& b, int sr, double attackSec, 
   }
 }
 
-class SineInstrument final : public IInstrument {
+class SquareInstrument final : public IInstrument {
 public:
-  explicit SineInstrument(const model::InstrumentSpec& spec) {
+  explicit SquareInstrument(const model::InstrumentSpec& spec) {
     m_attack = GetFloat(spec.params, "attack", 0.0);
     m_release = GetFloat(spec.params, "release", 0.0);
+    int duty = GetInt(spec.params, "duty", 50);
+    if (duty < 0) {
+      duty = 0;
+    }
+    if (duty > 100) {
+      duty = 100;
+    }
+    m_duty01 = static_cast<double>(duty) / 100.0;
     if (m_attack < 0.0 || m_release < 0.0) {
-      throw std::runtime_error("SineInstrument: attack/release must be >= 0");
+      throw std::runtime_error("SquareInstrument: attack/release must be >= 0");
     }
   }
 
@@ -73,11 +92,13 @@ public:
     const size_t n = static_cast<size_t>(std::ceil(durSec * SampleRate));
     out.data.resize(n, 0.0f);
     const double f = MidiToHz(midi);
-    const double w = 2.0 * 3.14159265358979323846 * f;
     const double invSr = 1.0 / static_cast<double>(SampleRate);
     for (size_t i = 0; i < n; ++i) {
       const double t = static_cast<double>(i) * invSr;
-      out.data[i] = static_cast<float>(std::sin(w * t) * static_cast<double>(velocity01));
+      const double phase = f * t;
+      const double phase01 = phase - std::floor(phase); // [0..1)
+      const float s = (phase01 < m_duty01) ? 1.0f : -1.0f;
+      out.data[i] = s * velocity01;
     }
     ApplyAttackRelease(out, SampleRate, m_attack, m_release);
     return out;
@@ -86,18 +107,22 @@ public:
 private:
   double m_attack = 0.0;
   double m_release = 0.0;
+  double m_duty01 = 0.5;
 };
 
 } // namespace instruments
 
 namespace {
-struct SineInstrumentRegistrar {
-  SineInstrumentRegistrar() {
-    factory::InstrumentFactory::RegisterType("sine", [](const model::InstrumentSpec& spec) {
-        return std::make_unique<instruments::SineInstrument>(spec);
+struct SquareInstrumentRegistrar {
+  SquareInstrumentRegistrar() {
+    factory::InstrumentFactory::RegisterType(
+      "square",
+      [](const model::InstrumentSpec& spec) {
+        return std::make_unique<instruments::SquareInstrument>(spec);
       }
     );
   }
 };
-static SineInstrumentRegistrar g_sine_registrar;
+
+static SquareInstrumentRegistrar g_square_registrar;
 } // namespace

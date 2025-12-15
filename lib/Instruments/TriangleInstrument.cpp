@@ -105,5 +105,6 @@ struct TriangleInstrumentRegistrar {
     );
   }
 };
+
 static TriangleInstrumentRegistrar g_triangle_registrar;
 } // namespace

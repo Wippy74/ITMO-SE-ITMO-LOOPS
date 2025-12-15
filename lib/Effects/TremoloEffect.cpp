@@ -68,5 +68,6 @@ struct TremoloEffectRegistrar {
     );
   }
 };
+
 static TremoloEffectRegistrar g_tremolo_registrar;
 } // namespace

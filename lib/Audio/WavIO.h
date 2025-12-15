@@ -16,4 +16,4 @@ public:
   static void WriteWav(const std::string& path, const AudioBuffer& buffer);
 };
 
-} // namespace udio
+} // namespace audio

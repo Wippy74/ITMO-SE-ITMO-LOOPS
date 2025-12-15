@@ -12,7 +12,7 @@ using Params = std::unordered_map<std::string, std::string>;
 class ParamReader {
 public:
   explicit ParamReader(const Params& p);
-  bool has(const std::string& key) const;
+  bool Has(const std::string& key) const;
   int GetInt(const std::string& key) const;
   double GetDouble(const std::string& key) const;
   std::string GetString(const std::string& key) const;

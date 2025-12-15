@@ -44,5 +44,6 @@ struct GainEffectRegistrar {
     );
   }
 };
+
 static GainEffectRegistrar g_gain_registrar;
 } // namespace
