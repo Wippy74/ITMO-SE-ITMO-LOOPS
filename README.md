@@ -1,5 +1,3 @@
-# Лабораторная работа 5
-
 ITMO Loops
 
 ## Задача
@@ -242,49 +240,3 @@ y(t) = x(t) * (1 - depth + depth * sin(2 * pi * freq * t))
 Ноты -> Инструмент -> Звук -> Эффект1 -> Эффект2 -> ... } Финальный звук
 Ноты -> Инструмент -> Звук -> Эффект1 -> Эффект2 -> ... }
 ```
-
-## NB
-
-- В WAV, звук может быть закодирован разными способами и с разной частотой дискретизации. Вам достаточно реализовать чтение и запись WAV файла в моно, 44.1kHz, 16-bit.
-
-- Ваша реализация должна быть расширяемой и легко поддерживать добавление новых инструметов и эффектов.
-
-- Подумайте, как правильно разделить отвественности и этапы генерации.
-
-## Материалы
-
-1. [Digital Audio - Wikipedia](https://en.wikipedia.org/wiki/Digital_audio)
-
-2. [WAV - Wikipedia](https://en.wikipedia.org/wiki/WAV)
-
-3. [Wave File Specifications - McGill University](https://mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html)
-
-4. [Oscillators and wavetables - Wikibooks](https://en.wikibooks.org/wiki/Sound_Synthesis_Theory/Oscillators_and_Wavetables)
-
-5. [Understanding sound - Wikibooks](https://en.wikibooks.org/wiki/Digital_Music_Composition/Understanding_Sound)
-
-5. [What is Sampling? - YouTube, Berkley Online](https://youtu.be/sDnw4FFTb6Q)
-
-6. [Factory method pattern - Wikipedia](https://en.wikipedia.org/wiki/Factory_method_pattern)
-
-## Теормин
-
-1. ООП. Абстракция и Инкапсуляция
-2. Классы. Специальные методы
-3. Классы. Перегрузки операторов
-4. ООП. Наследование
-5. ООП. Полиморфизм
-6. RAII
-7. Виртуальные функции
-
-## Deadline
-
-| deadline | date | coeff | branch |
-|----------|-----------------|-------|------------|
-| 0 | 15.12.25 23:59 | 1.0 | deadline_0 |
-| 1 | 22.12.25 23:59 | 0.8 | deadline_1 |
-| 2 | 31.12.25 23:59 | 0.65 | deadline_2 |
-| 3 | 07.01.26 00:00 | 0.5 | deadline_3 |
-
-Максимальное количество баллов - 12
-
