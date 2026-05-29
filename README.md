@@ -1,4 +1,4 @@
-# ITMO Loops
+# Composition Generator
 
 ## Бизнес-логика приложения
 
